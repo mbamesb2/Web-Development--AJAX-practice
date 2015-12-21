@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      var apiKey = 'c878f3d4c5ce7f01dc90bbe2d4e4f541';
+      
+      document.addEventListener('DOMContentLoaded', bindButtons);
+
+      function bindButtons(){
+        document.getElementById('zipSubmit').addEventListener('click', function(event){    
+        var req = new XMLHttpRequest();
+        var payload = document.getElementById('enterZip').value;
+        req.open('GET', 'http://api.openweathermap.org/data/2.5/weather?zip=' + payload + ',us&appid=' + apiKey, true)
+        req.addEventListener('load', function (){
+          if(req.status >= 200 && req.status < 400) {
+            var response = JSON.parse(req.responseText);
+            document.getElementById('currentCity').textContent = response.name;
+            var temperature = (((response.main.temp) * (1.8)) - 457.67) ;
+            temperature = Math.ceil(temperature * 10) / 10;
+            document.getElementById('currentTemp').textContent = temperature;
+            document.getElementById('currentHumidity').textContent = response.main.humidity;
+          }
+          else {
+            console.log("Something is wrong:" + request.statusText);
+          }});
+      req.send(null);    
+      event.preventDefault();    
+          
+          
+        })
+      }
+    </script>
+  </head>
+   <body>
+    <form>
+      <fieldset>
+        <legend>Weather App</legend>
+        <label for="enterZip">Please enter a zip code: </label>
+        <input type="text" name="enterZip" id="enterZip">
+        <input type="submit" id="zipSubmit">
+      </fieldset>
+    </form>
+    <div>
+      <h2>Result</h2>
+      <ul>
+        <li><span>City: </span><span id="currentCity"></span></li>
+        <li><span>Temperature in Fahrenheit: </span><span id="currentTemp"></span></li>
+        <li><span>Humidity: </span><span id = "currentHumidity"></span></li>
+      </ul>
+    </div>
+  </body>
+</html>
